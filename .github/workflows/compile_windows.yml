@@ -20,6 +20,12 @@ jobs:
 
       - name: Build
         run: cmake --build build --config Release
+      
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: shutexec
+          path: build\Release\shutexec.exe
 
       - name: Create Release
         id: create_release
@@ -28,12 +34,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v1.${{ github.run_number }}.0
-          release_name: Release v1.${{ github.run_number }}.0
+          release_name: v1.${{ github.run_number }}.0
           draft: false
           prerelease: false
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+      - name: Upload release artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: shutexec
-          path: build\Release\shutexec.exe
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./shutexec.exe
+          asset_name: shutexec-v1.${{ github.run_number }}.0.exe
+          asset_content_type: application/exe
