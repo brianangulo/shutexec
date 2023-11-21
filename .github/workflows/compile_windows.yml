@@ -1,0 +1,39 @@
+name: Compile and Release Windows
+
+on:
+  push:
+    branches: ['master']
+
+jobs:
+  build:
+    name: Building
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up MSVC
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      - name: Configure CMake
+        run: cmake -B build
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v1.${{ github.run_number }}.0
+          release_name: Release v1.${{ github.run_number }}.0
+          draft: false
+          prerelease: false
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: MyApp
+          path: build/MyApp.exe
