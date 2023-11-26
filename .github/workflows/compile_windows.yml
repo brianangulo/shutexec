@@ -49,6 +49,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: shutexec
+          asset_path: D:\a\shutexec\shutexec
           asset_name: shutexec-v1.${{ github.run_number }}.0.exe
           asset_content_type: application/exe
