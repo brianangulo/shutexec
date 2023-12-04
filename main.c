@@ -2,6 +2,6 @@
 
 int main()
 {
-    system("C:\\WINDOWS\\System32\\shutdown /s");
+    system("shutdown /s");
     return 0;
 }
